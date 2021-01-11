@@ -1,4 +1,4 @@
-package com.iljaknk;
+package com.iljaknk.Game.app_data;
 
 public enum Move_type
 {

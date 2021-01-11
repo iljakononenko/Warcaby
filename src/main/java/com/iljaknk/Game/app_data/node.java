@@ -1,6 +1,5 @@
-package com.iljaknk;
+package com.iljaknk.Game.app_data;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import static com.iljaknk.App.NODE_SIZE;
@@ -8,7 +7,6 @@ import static com.iljaknk.App.NODE_SIZE;
 public class node extends Ellipse
 {
     private Piece piece;
-    Piece_type type;
     int x,y,z;
     node (int x, int y)
     {
@@ -20,23 +18,11 @@ public class node extends Ellipse
         relocate(x * NODE_SIZE * 2, y * NODE_SIZE * 2);
     }
 
-    // checks if a coordinates we passed are valid has not piece in it
-    // returns true if a coordinate are valid and node is empty (so that we can move there)
-    // *useless*
-    public boolean check_node (int x, int y)
-    {
-
-        if (check_Coordinates(x, y) && check_Node_empty())
-        {
-            return true;
-        }
-        return false;
-    }
-
-    // checks if a node has a piece of is null (is empty)
+    // checks if a node has a piece or is null (is empty)
 
     public boolean check_Node_empty ()
     {
+        // fix for pieces of the same color
         if (piece == null)
         {
             return true;
@@ -48,10 +34,6 @@ public class node extends Ellipse
         }
     }
 
-    public Piece getPiece() {
-        return piece;
-    }
-
     public void setPiece(Piece piece) {
         this.piece = piece;
     }
@@ -60,16 +42,7 @@ public class node extends Ellipse
 
     public boolean check_Coordinates (int x_to_check, int y_to_check)
     {
-        if (this.x == x_to_check && this.y == y_to_check)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void show_node ()
-    {
-        System.out.println("( "+ this.x + ", " + this.y + ", " + this.z + " )");
+        return this.x == x_to_check && this.y == y_to_check;
     }
 
 }
