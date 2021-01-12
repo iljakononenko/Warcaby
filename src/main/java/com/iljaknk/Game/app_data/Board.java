@@ -17,6 +17,8 @@ public class Board
 
     public void add (Player_color type, int x, int y)
     {
+        x += 4;
+        y += 2;
         node new_node = new node(x,y);
         node_board.add(new_node);
         node_Group.getChildren().add(new_node);
