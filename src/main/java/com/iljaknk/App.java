@@ -1,14 +1,11 @@
 package com.iljaknk;
 
-import com.iljaknk.Client_Server.Network_Connection;
-import com.iljaknk.Client_Server.Online_Player;
-import com.iljaknk.Client_Server.Server;
+import com.iljaknk.Client_Server.Warcaby_Player;
+import com.iljaknk.Game.Game_engine;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -22,18 +19,17 @@ import java.io.IOException;
 
 public class App extends Application {
 
-    private static boolean is_Server = false;
-
+    public static int player_id = 0;
     public static TextArea messages_output = new TextArea();
     public static TextField messages_input = new TextField();
 
-    public static Network_Connection connection = is_Server ? create_Server() : create_Player();
+    public static Warcaby_Player connection = create_Warcaby_Player();
 
-    public static int players_turn = 0;
+    public static Label label_Players_connected = new Label("0 / 6 Players are connected");
     public static Label players_turn_label = new Label();
     public static Stage window;
     public static Scene menu_scene, game_scene;
-    public static int number_of_players = 6;
+    public static int number_of_players;
 
     public static final int NODE_SIZE = 15;
     public static Group node_Group = new Group();
@@ -48,34 +44,34 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException
     {
+        window = stage;
+
         messages_input.setOnAction(event ->
         {
-            String sms = is_Server ? "Server: " : "Player: ";
-            sms += messages_input.getText();
+            String message;
+            message = messages_input.getText();
             messages_input.clear();
-
-            messages_output.appendText(sms + "\n");
 
             try
             {
-                connection.send(sms);
+                connection.send(message);
             }
             catch (Exception e)
             {
                 messages_output.appendText("Failed to send");
             }
         });
+
         messages_output.setPrefHeight(150);
         messages_output.setPrefWidth(200);
         VBox chat_panel = new VBox(20, messages_output, messages_input);
         chat_panel.setPrefSize(200, 200);
 
+        label_Players_connected.setFont(Font.font(16.0));
+        label_Players_connected.setAlignment(Pos.CENTER);
 
         players_turn_label.setAlignment(Pos.CENTER);
-
         players_turn_label.setFont(Font.font(24));
-
-        window = stage;
 
         Pane game_pane = new Pane();
         game_pane.getChildren().addAll(node_Group, piece_Group);
@@ -87,6 +83,10 @@ public class App extends Application {
         parent_game_pane.setCenter(game_pane);
 
         BorderPane menu = FXMLLoader.load(App.class.getResource("/menu_window.fxml"));
+
+        menu.setTop(label_Players_connected);
+        BorderPane.setMargin(label_Players_connected, new Insets(10, 20, 30, 40));
+        BorderPane.setAlignment(label_Players_connected, Pos.TOP_CENTER);
 
         menu.setLeft(chat_panel);
 
@@ -103,26 +103,21 @@ public class App extends Application {
         connection.close_Connection();
     }
 
-    private static Server create_Server()
+    public static void start_game (int first_turn_player)
     {
-        return new Server(55555, data ->
-        {
-            Platform.runLater(() ->
-            {
-                messages_output.appendText(data.toString() + "\n");
-            });
-        });
+        Game_engine game_engine = new Game_engine();
+        game_engine.start_Game(first_turn_player);
+        window.setScene(game_scene);
     }
 
-    private static Online_Player create_Player()
+    public static void initialize_player_id (int player_id)
     {
-        return new Online_Player("localhost", 55555, data ->
-        {
-            Platform.runLater(() ->
-            {
-                messages_output.appendText(data.toString() + "\n");
-            });
-        });
+        App.player_id = player_id;
+    }
+
+    private static Warcaby_Player create_Warcaby_Player()
+    {
+        return new Warcaby_Player();
     }
 
     public static void main(String[] args) {

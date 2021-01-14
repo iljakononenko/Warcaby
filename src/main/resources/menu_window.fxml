@@ -16,11 +16,6 @@
                </padding>
             </Button>
             <Button layoutX="274.0" layoutY="200.0" mnemonicParsing="false" text="Button" />
-            <Label fx:id="label_Players_connected" layoutX="205.0" layoutY="68.0" text="0 / 6 Players are connected">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
          </children>
       </Pane>
    </center>

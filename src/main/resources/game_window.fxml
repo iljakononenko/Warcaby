@@ -22,11 +22,4 @@
          </BorderPane.margin>
       </Button>
    </bottom>
-   <top>
-      <Label text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-   </top>
 </BorderPane>

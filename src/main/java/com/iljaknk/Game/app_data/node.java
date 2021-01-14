@@ -1,5 +1,6 @@
 package com.iljaknk.Game.app_data;
 
+import com.iljaknk.Game.Player_color;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import static com.iljaknk.App.NODE_SIZE;
@@ -7,9 +8,11 @@ import static com.iljaknk.App.NODE_SIZE;
 public class node extends Ellipse
 {
     private Piece piece;
+    private Player_color type_of_home;
     int x,y,z;
-    node (int x, int y)
+    node (int x, int y, Player_color type_of_home)
     {
+        this.type_of_home = type_of_home;
         this.setFill(Color.valueOf("#7A371C"));
         this.x = x * 2;
         this.y = y * 2;
@@ -32,6 +35,16 @@ public class node extends Ellipse
             System.out.println("Node is not empty!");
             return false;
         }
+    }
+
+    public Piece getPiece()
+    {
+        return piece;
+    }
+
+    public Player_color getType_of_home()
+    {
+        return type_of_home;
     }
 
     public void setPiece(Piece piece) {

@@ -174,7 +174,7 @@ public class Board_Factory
             min_x ++;
         }
 
-        // creating the center (Part two)
+        // creating the center (Part one)
 
         min_x = 8;
         max_x = 16;
