@@ -1,0 +1,56 @@
+@startuml
+
+title __iljaknk's Class Diagram__\n
+
+
+    namespace com.iljaknk {
+      class com.iljaknk.App {
+          {static} + NODE_SIZE : int
+          {static} + Player_name : Label
+          {static} + connection : Warcaby_Player
+          {static} + game_scene : Scene
+          {static} + label_Players_connected : Label
+          {static} + menu_scene : Scene
+          {static} + messages_input : TextField
+          {static} + messages_output : TextArea
+          {static} + node_Group : Group
+          {static} + number_of_players : int
+          {static} + piece_Group : Group
+          {static} + player_id : int
+          {static} + players_turn_label : Label
+          {static} + window : Stage
+          + init()
+          {static} + initialize_player_id()
+          {static} + main()
+          + start()
+          {static} + start_game()
+          + stop()
+          {static} - create_Warcaby_Player()
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      class com.iljaknk.game_window_Controller {
+          + end_turn()
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      class com.iljaknk.menu_window_Controller {
+          + start_game_button : Button
+          + start_game()
+      }
+    }
+
+  
+
+  com.iljaknk.App -up-|> javafx.application.Application
+
+
+@enduml

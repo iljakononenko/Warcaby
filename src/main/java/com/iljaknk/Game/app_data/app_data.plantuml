@@ -1,0 +1,125 @@
+@startuml
+
+title __APP_DATA's Class Diagram__\n
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        namespace app_data {
+          class com.iljaknk.Game.app_data.Board {
+              + pieces : ArrayList<Piece>
+              ~ node_board : ArrayList<node>
+              + add()
+              + check_if_jump_valid()
+              + check_if_neighbours()
+              + check_if_players_pieces_at_enemy_home()
+              + check_if_there_is_piece_between()
+              + clear_jump_piece_flags()
+              + find_node()
+              + move_Piece()
+              ~ Board()
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        namespace app_data {
+          class com.iljaknk.Game.app_data.Board_Factory {
+              + Board_Factory()
+              + build_Board()
+              + get_Board()
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        namespace app_data {
+          enum Move_type {
+            JUMP
+            NONE
+            NORMAL
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        namespace app_data {
+          class com.iljaknk.Game.app_data.Piece {
+              - is_at_enemy_home : boolean
+              - mouseX : double
+              - mouseY : double
+              - oldX : double
+              - oldY : double
+              - piece_that_jumps : boolean
+              + change_piece_coordinates()
+              + getOldX()
+              + getOldY()
+              + get_enemy_home_color()
+              + get_piece_color()
+              + is_at_enemy_home()
+              + is_jump_piece()
+              + set_jump_piece_flag()
+              ~ Piece()
+              - Move()
+              - abort_Move()
+              - build_piece()
+              - color_picker()
+              - to_Board()
+              - try_Move()
+              - try_move_out_enemy_home()
+              - try_move_to_enemy_home()
+          }
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        namespace app_data {
+          class com.iljaknk.Game.app_data.node {
+              ~ x : int
+              ~ y : int
+              ~ z : int
+              + check_Coordinates()
+              + getPiece()
+              + getType_of_home()
+              + is_empty()
+              + setPiece()
+              ~ node()
+          }
+        }
+      }
+    }
+
+  
+
+  com.iljaknk.Game.app_data.Board_Factory o-- com.iljaknk.Game.app_data.Board : sample
+  com.iljaknk.Game.app_data.Piece -up-|> javafx.scene.layout.StackPane
+  com.iljaknk.Game.app_data.Piece o-- com.iljaknk.Game.Player_color : color
+  com.iljaknk.Game.app_data.Piece o-- com.iljaknk.Game.Player_color : enemy_home_color
+  com.iljaknk.Game.app_data.node -up-|> javafx.scene.shape.Ellipse
+  com.iljaknk.Game.app_data.node o-- com.iljaknk.Game.app_data.Piece : piece
+  com.iljaknk.Game.app_data.node o-- com.iljaknk.Game.Player_color : type_of_home
+
+
+
+
+@enduml

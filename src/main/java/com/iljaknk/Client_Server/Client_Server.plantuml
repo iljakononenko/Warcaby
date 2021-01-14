@@ -1,0 +1,64 @@
+@startuml
+
+title __CLIENT_SERVER's Class Diagram__\n
+
+
+    namespace com.iljaknk {
+      namespace Client_Server {
+        class com.iljaknk.Client_Server.Warcaby_Player {
+            - in : Scanner
+            - name : String
+            - out : PrintWriter
+            - port : int
+            - socket : Socket
+            + close_Connection()
+            + run()
+            + send()
+            + start_Connection()
+            - try_Server_command()
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Client_Server {
+        class com.iljaknk.Client_Server.Warcaby_Server {
+            {static} - number_of_players : Integer
+            {static} - online_players : Set<PrintWriter>
+            {static} - players_turn : int
+            {static} - winners : List<Integer>
+            {static} + main()
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Client_Server {
+        class com.iljaknk.Client_Server.Warcaby_Server.new_Player {
+            - id : int
+            - in : Scanner
+            - out : PrintWriter
+            - player_name : String
+            - socket : Socket
+            + append_players_turn()
+            + is_a_winner()
+            + run()
+            + send_to_all_Player()
+            ~ new_Player()
+        }
+      }
+    }
+
+  
+
+  com.iljaknk.Client_Server.Warcaby_Server +-down- com.iljaknk.Client_Server.Warcaby_Server.new_Player
+  com.iljaknk.Client_Server.Warcaby_Server.new_Player .up.|> java.lang.Runnable
+
+
+@enduml

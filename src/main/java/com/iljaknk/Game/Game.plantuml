@@ -1,0 +1,93 @@
+@startuml
+
+title __GAME's Class Diagram__\n
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        class com.iljaknk.Game.All_Players {
+            ~ list_of_players : ArrayList<Player>
+            + check_if_won()
+            + get_Player_id()
+            + get_Players_name()
+            + get_player()
+            + get_player_color()
+            ~ All_Players()
+            - fill_list_of_2_players()
+            - fill_list_of_3_players()
+            - fill_list_of_4_players()
+            - fill_list_of_6_players()
+            - fill_list_of_players()
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        class com.iljaknk.Game.Game_engine {
+            {static} + board : Board
+            {static} + can_jump : boolean
+            {static} + can_move : boolean
+            {static} + is_Winner : boolean
+            {static} + list_of_players : All_Players
+            {static} + players_turn : int
+            {static} + server_is_notified_about_winner : boolean
+            {static} + change_connected_players()
+            {static} + change_turn_label()
+            {static} + check_if_won()
+            {static} + end_turn()
+            {static} + get_Player_color()
+            {static} + int_to_two_digit_str_number()
+            {static} + make_move()
+            {static} + send_turn()
+            + start_Game()
+            {static} + str_two_digit_numbers_to_int()
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        class com.iljaknk.Game.Player {
+            ~ name : String
+            {static} ~ number_of_players : Integer
+            ~ player_id : int
+            + getName()
+            + getPlayer_color()
+            + getPlayer_id()
+            ~ Player()
+        }
+      }
+    }
+
+  
+
+
+    namespace com.iljaknk {
+      namespace Game {
+        enum Player_color {
+          BLACK
+          BLUE
+          GREEN
+          NONE
+          RED
+          WHITE
+          YELLOW
+        }
+      }
+    }
+
+  
+
+  com.iljaknk.Game.Player o-- com.iljaknk.Game.Player_color : player_color
+
+
+
+
+@enduml
