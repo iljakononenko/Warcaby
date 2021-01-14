@@ -23,16 +23,14 @@ public class node extends Ellipse
 
     // checks if a node has a piece or is null (is empty)
 
-    public boolean check_Node_empty ()
+    public boolean is_empty()
     {
-        // fix for pieces of the same color
         if (piece == null)
         {
             return true;
         }
         else
         {
-            System.out.println("Node is not empty!");
             return false;
         }
     }

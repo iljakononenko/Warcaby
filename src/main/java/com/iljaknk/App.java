@@ -27,6 +27,7 @@ public class App extends Application {
 
     public static Label label_Players_connected = new Label("0 / 6 Players are connected");
     public static Label players_turn_label = new Label();
+    public static Label Player_name = new Label();
     public static Stage window;
     public static Scene menu_scene, game_scene;
     public static int number_of_players;
@@ -70,6 +71,9 @@ public class App extends Application {
         label_Players_connected.setFont(Font.font(16.0));
         label_Players_connected.setAlignment(Pos.CENTER);
 
+        Player_name.setAlignment(Pos.CENTER);
+        Player_name.setFont(Font.font(24));
+
         players_turn_label.setAlignment(Pos.CENTER);
         players_turn_label.setFont(Font.font(24));
 
@@ -79,6 +83,7 @@ public class App extends Application {
         BorderPane parent_game_pane = FXMLLoader.load(App.class.getResource("/game_window.fxml"));
 
         parent_game_pane.setTop(players_turn_label);
+        parent_game_pane.setRight(Player_name);
         BorderPane.setAlignment(players_turn_label, Pos.TOP_CENTER);
         parent_game_pane.setCenter(game_pane);
 

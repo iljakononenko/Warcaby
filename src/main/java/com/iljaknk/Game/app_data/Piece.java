@@ -15,6 +15,7 @@ public class Piece extends StackPane
     private Player_color enemy_home_color;
     private double mouseX, mouseY, oldX, oldY;
     private boolean is_at_enemy_home = false;
+    private boolean piece_that_jumps = false;
 
     // Getters
 
@@ -68,7 +69,17 @@ public class Piece extends StackPane
         relocate(oldX, oldY);
     }
 
-    public boolean check_if_is_at_enemy_home ()
+    public void set_jump_piece_flag (boolean flag)
+    {
+        piece_that_jumps = flag;
+    }
+
+    public boolean is_jump_piece ()
+    {
+        return piece_that_jumps;
+    }
+
+    public boolean is_at_enemy_home()
     {
         return is_at_enemy_home;
     }
@@ -114,14 +125,13 @@ public class Piece extends StackPane
         {
             case NONE -> abort_Move();
             case NORMAL -> {
-                // uncomment after all tests
-                //can_move = false;
+                can_move = false;
+                can_jump = false;
                 Game_engine.send_turn(x_0, y_0, new_X, new_Y);
             }
             case JUMP -> {
-                change_piece_coordinates(new_X, new_Y);
-                board.find_node(x_0, y_0).setPiece(null);
-                board.find_node(new_X, new_Y).setPiece(this);
+                can_move = false;
+                Game_engine.send_turn(x_0, y_0, new_X, new_Y);
             }
         }
 
@@ -140,7 +150,7 @@ public class Piece extends StackPane
 
         node node_to_move = board.find_node(new_x, new_y);
 
-        // node is not found (find_node method return null to node_to_move)
+        // if node is not found (find_node method return null to node_to_move) returns Move_type.NONE
 
         if (node_to_move == null)
         {
@@ -148,39 +158,56 @@ public class Piece extends StackPane
             return Move_type.NONE;
         }
 
-        // if a color of a piece is different than color of player's turn
-        // or player cannot move anymore
-        // returns NONE
+        // if node to move is not empty returns Move_type.NONE
 
-        if (Game_engine.get_Player_color() != get_piece_color() || (!can_move) )
+        if (!node_to_move.is_empty())
         {
-            if (Game_engine.get_Player_color() != get_piece_color())
-            {
-                System.out.println("Not your piece!");
-            }
-            if (!can_move)
-            {
-                System.out.println("Not your move!");
-            }
+            System.out.println("Node is not empty!");
             return Move_type.NONE;
         }
 
-        // node is found
-        // we check if there is a piece
-        // can't move if a chosen node has a piece in it
-        // returns NORMAL Move_type if there is no piece and NONE if there is a piece
+        // if a color of a piece is different than color of player's turn returns Move_type.NONE
 
-        if (board.check_if_neighbours(x_0, y_0, new_x, new_y) && node_to_move.check_Node_empty())
+        if (Game_engine.get_Player_color() != get_piece_color())
+        {
+            System.out.println("Not your piece!");
+            return Move_type.NONE;
+        }
+
+        // if a Player cannot jump and move anymore return Move_type.NONE
+
+        if (!can_jump && !can_move)
+        {
+            System.out.println("Not your move!");
+            return Move_type.NONE;
+        }
+
+        // if a piece is trying to escape an enemy's home returns Move_type.NONE
+
+        if (try_move_out_enemy_home(node_to_move.getType_of_home()))
+        {
+            System.out.println("You are already at enemy's home!");
+            return Move_type.NONE;
+        }
+
+        // finally after checks we can try to move or jump
+
+        // if a node is a neighbour to a prev location returns Move_type.NORMAL
+
+        if (board.check_if_neighbours(x_0, y_0, new_x, new_y) && can_move)
         {
             try_move_to_enemy_home(node_to_move.getType_of_home());
 
-            if (try_move_out_enemy_home(node_to_move.getType_of_home()))
-            {
-                System.out.println("You are already at enemy's home!");
-                return Move_type.NONE;
-            }
-
             return Move_type.NORMAL;
+        }
+
+        // an attempt to make a jump
+
+        if (board.check_if_jump_valid(x_0, y_0, new_x, new_y))
+        {
+            try_move_to_enemy_home(node_to_move.getType_of_home());
+
+            return Move_type.JUMP;
         }
 
         else

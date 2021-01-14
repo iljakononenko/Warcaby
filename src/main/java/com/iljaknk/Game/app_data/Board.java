@@ -5,6 +5,7 @@ import com.iljaknk.Game.Player_color;
 import java.util.ArrayList;
 
 import static com.iljaknk.App.*;
+import static com.iljaknk.Game.Game_engine.can_move;
 
 public class Board
 {
@@ -79,7 +80,7 @@ public class Board
 
         if (dir_x == 0)
         {
-            System.out.println("(" + x_0 + "; " + y_0 + ") and (" + new_x + "; " + new_y + ")" + " are not neighbours!");
+            System.out.println("You cannot move straight up!");
             return false;
         }
 
@@ -107,20 +108,95 @@ public class Board
         return false;
     }
 
-    public boolean check_if_all_pieces_at_enemy_home (Player_color color_to_check)
+    public boolean check_if_jump_valid (int x_0, int y_0, int new_x, int new_y)
+    {
+
+        int dir_x = new_x - x_0;
+
+        // we cannot move straight up and down
+        // if dir_x hasn't changed, that's what we are trying to do
+
+        if (dir_x == 0)
+        {
+            System.out.println("You cannot move straight up!");
+            return false;
+        }
+
+        int dir_y = new_y - y_0;
+
+
+        Piece jump_piece = find_node(x_0, y_0).getPiece();
+        // check if a piece that jumped previously is the same as tries to jump now
+
+        if (!jump_piece.is_jump_piece() && !can_move)
+        {
+            System.out.println("This is not the same piece!");
+            return false;
+        }
+
+        boolean is_piece_between = check_if_there_is_piece_between(x_0, y_0, new_x, new_y);
+
+        if (dir_y == 0 && Math.abs(dir_x) == 8)
+        {
+            if (is_piece_between)
+            {
+                jump_piece.set_jump_piece_flag(true);
+                return true;
+            }
+        }
+
+        if (Math.abs(dir_x) == 4 && Math.abs(dir_y) == 4)
+        {
+            if (is_piece_between)
+            {
+                jump_piece.set_jump_piece_flag(true);
+                return true;
+            }
+        }
+
+        System.out.println("Jump from (" + x_0 + "; " + y_0 + ") to (" + new_x + "; " + new_y + ")" + " is impossible!");
+        return false;
+    }
+
+    public boolean check_if_there_is_piece_between (int x_0, int y_0, int new_x, int new_y)
+    {
+        int between_node_x = (new_x + x_0) / 2;
+        int between_node_y = (new_y + y_0) / 2;
+        node node_var = find_node(between_node_x, between_node_y);
+        if (node_var == null)
+        {
+            return false;
+        }
+        if (!node_var.is_empty())
+        {
+            return true;
+        }
+        System.out.println("Node (" + between_node_x + "; " + between_node_y + ") is empty! You cannot jump over it!");
+        return false;
+    }
+
+    public boolean check_if_players_pieces_at_enemy_home (Player_color color_to_check)
     {
         boolean flag = true;
         for (Piece piece_var : pieces)
         {
             if (piece_var.get_piece_color() == color_to_check)
             {
-                if (!piece_var.check_if_is_at_enemy_home())
+                if (!piece_var.is_at_enemy_home())
                 {
                     flag = false;
                 }
             }
         }
         return flag;
+    }
+
+    public void clear_jump_piece_flags ()
+    {
+        for (Piece piece_var : pieces)
+        {
+            piece_var.set_jump_piece_flag(false);
+        }
     }
 
 
